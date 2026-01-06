@@ -36,12 +36,50 @@ def save_results(domain, subs):
 
     print(f"   [+] Saved {len(subs)} subdomains → {outfile}")
 
+
+def load_previous_results(domain):
+    """Return yesterday's subdomain list if available."""
+    files = sorted(RESULT_DIR.glob(f"{domain}_*.txt"))
+    if len(files) < 2:
+        return set()
+    return set(Path(files[-2]).read_text().splitlines())
+
+def save_and_diff(domain, subs):
+    today = datetime.now().strftime("%Y-%m-%d")
+    outfile = RESULT_DIR / f"{domain}_{today}.txt"
+
+    # Save today's results
+    with open(outfile, "w") as f:
+        f.write("\n".join(subs))
+
+    print(f"   [+] Saved {len(subs)} subdomains → {outfile}")
+
+    # Load yesterday’s list
+    previous = load_previous_results(domain)
+
+    # Compute new subs
+    new_subs = set(subs) - previous
+
+    if new_subs:
+        diff_file = RESULT_DIR / f"{domain}_{today}_new.txt"
+        with open(diff_file, "w") as f:
+            f.write("\n".join(sorted(new_subs)))
+        print(f"   [🔥] {len(new_subs)} new subdomains found!")
+        for s in new_subs:
+            print(f"       ➤ {s}")
+    else:
+        print("   [✓] No new subdomains today.")
+
+    return new_subs
+
+
+
 def main():
     targets = Path("targets.txt").read_text().splitlines()
 
     for domain in targets:
         subs = enumerate_subdomains(domain)
-        save_results(domain, subs)
+        save_and_diff(domain, subs)
 
 if __name__ == "__main__":
     main()
