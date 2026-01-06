@@ -1,0 +1,16 @@
+tools:
+  subfinder: "subfinder -silent -d {domain}"
+  amass: "amass enum -passive -d {domain}"
+  assetfinder: "assetfinder --subs-only {domain}"
+
+paths:
+  subdomain_output: "results/subdomains"
+  alive_output: "results/alive"
+  scan_output: "results/scans"
+  screenshot_output: "results/screenshots"
+
+notify:
+  enabled: false
+  telegram:
+    token: "YOUR_BOT_TOKEN_HERE"
+    chat_id: "YOUR_CHAT_ID_HERE"

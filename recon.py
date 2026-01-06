@@ -2,6 +2,8 @@ import subprocess
 import yaml
 from pathlib import Path
 from datetime import datetime
+from notify import new_subdomains_alert
+
 
 CONFIG = yaml.safe_load(open("config.yaml"))
 RESULT_DIR = Path(CONFIG["paths"]["subdomain_output"])
@@ -67,6 +69,7 @@ def save_and_diff(domain, subs):
         print(f"   [🔥] {len(new_subs)} new subdomains found!")
         for s in new_subs:
             print(f"       ➤ {s}")
+        new_subdomains_alert(domain, new_subs)
     else:
         print("   [✓] No new subdomains today.")
 
