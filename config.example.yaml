@@ -2,6 +2,7 @@ tools:
   subfinder: "subfinder -silent -d {domain}"
   amass: "amass enum -passive -d {domain}"
   assetfinder: "assetfinder --subs-only {domain}"
+  httpx: "httpx -silent -status-code -title -tech-detect"
 
 paths:
   subdomain_output: "results/subdomains"

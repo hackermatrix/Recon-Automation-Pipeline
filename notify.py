@@ -32,3 +32,7 @@ def new_subdomains_alert(domain, new_subs):
         return
     msg = f"[Recon] {len(new_subs)} new subdomains found for {domain}:\n" + "\n".join(new_subs)
     telegram(msg)
+
+
+if __name__ == "__main__":
+    new_subdomains_alert("example.com", ["sub1.example.com", "sub2.example.com"])

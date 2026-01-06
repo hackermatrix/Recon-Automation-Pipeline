@@ -76,13 +76,37 @@ def save_and_diff(domain, subs):
     return new_subs
 
 
+def check_alive(domain, subdomains):
+    """Run httpx and save only alive subdomains."""
+    alive_dir = Path(CONFIG["paths"]["alive_output"])
+    alive_dir.mkdir(parents=True, exist_ok=True)
+
+    print(f"[*] Checking alive subdomains for {domain}...")
+
+    # Run httpx directly with stdin input
+    cmd = f"echo \"{chr(10).join(subdomains)}\" | {CONFIG['tools']['httpx']}"
+    result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+
+    alive_subs = [line.strip() for line in result.stdout.splitlines() if line.strip()]
+
+    # Save alive list only
+    alive_file = alive_dir / f"{domain}_alive.txt"
+    with open(alive_file, "w") as f:
+        f.write("\n".join(alive_subs))
+
+    print(f"[+] Alive: {len(alive_subs)} → {alive_file}")
+    return alive_subs
+
+
+
 
 def main():
     targets = Path("targets.txt").read_text().splitlines()
 
     for domain in targets:
         subs = enumerate_subdomains(domain)
-        save_and_diff(domain, subs)
+        new_subs = save_and_diff(domain, subs)
+        alive_subs = check_alive(domain, subs)
 
 if __name__ == "__main__":
     main()
