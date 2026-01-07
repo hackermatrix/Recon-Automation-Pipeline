@@ -3,12 +3,19 @@ tools:
   amass: "amass enum -passive -d {domain}"
   assetfinder: "assetfinder --subs-only {domain}"
   httpx: "httpx -silent -status-code -title -tech-detect"
+  nmap_quick: "nmap -T4 -Pn -n -p 1-1000"
+  nmap_full: "nmap -T4 -Pn -n -p-"
+  nuclei: "nuclei -silent -severity critical,high,medium"
+  eyewitness: "eyewitness --web -f {file} -d {outdir} --timeout 10 --no-prompt"
+  whatweb: "whatweb --input-file={file} --aggression=3 --log-verbose={outfile}"
 
 paths:
   subdomain_output: "results/subdomains"
   alive_output: "results/alive"
   scan_output: "results/scans"
   screenshot_output: "results/screenshots"
+  tech_output: "results/tech"
+
 
 notify:
   enabled: false
