@@ -1,7 +1,9 @@
-tools:
+sub_enum_tools:
   subfinder: "subfinder -silent -d {domain}"
   amass: "amass enum -passive -d {domain}"
   assetfinder: "assetfinder --subs-only {domain}"
+
+tools:
   httpx: "httpx -silent -status-code -title -tech-detect"
   nmap_quick: "nmap -T4 -Pn -n -p 1-1000"
   nmap_full: "nmap -T4 -Pn -n -p-"

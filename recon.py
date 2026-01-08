@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import subprocess
 import os
 import logging
@@ -27,7 +28,7 @@ def enumerate_subdomains(domain):
     logging.info(f"Enumerating subdomains for {domain}")
     subs = set()
 
-    for name, template in CONFIG["tools"].items():
+    for name, template in CONFIG["sub_enum_tools"].items():
         cmd = template.format(domain=domain)
         logging.info(f"Running {name}...")
         subs.update(run_cmd(cmd))
@@ -78,10 +79,10 @@ def save_and_diff(domain, subs):
     else:
         logging.info("No new subdomains today.")
 
-    return new_subs
+    return new_subs,outfile
 
 
-def check_alive(domain, subdomains):
+def check_alive(domain, subdomains_save_path):
     """Run httpx and save both full info and clean hosts."""
     alive_dir = Path(CONFIG["paths"]["alive_output"])
     alive_dir.mkdir(parents=True, exist_ok=True)
@@ -89,7 +90,7 @@ def check_alive(domain, subdomains):
     logging.info(f"Checking alive subdomains for {domain}...")
 
     # Run httpx with stdin
-    cmd = f"echo \"{chr(10).join(subdomains)}\" | {CONFIG['tools']['httpx']}"
+    cmd = f"cat {subdomains_save_path} | {CONFIG['tools']['httpx']}"
     result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
 
     full_output = [line.strip() for line in result.stdout.splitlines() if line.strip()]
@@ -249,8 +250,8 @@ def main():
 
     for domain in targets:
         subs = enumerate_subdomains(domain)
-        new_subs = save_and_diff(domain, subs)
-        clean_alive, alive_urls = check_alive(domain, subs)
+        new_subs,save_path = save_and_diff(domain, subs)
+        clean_alive, alive_urls = check_alive(domain, save_path)
         quick = nmap_quick_scan(domain, clean_alive)
         nmap_full_scan(quick)
         run_nuclei(domain, clean_alive)
