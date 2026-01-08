@@ -1,11 +1,3 @@
-🔥 Absolutely — here’s a clean **README.md** you can drop into your repo.
-No placeholders — already fits your Phase 1–5 pipeline + cron + logging.
-
----
-
-## 📄 **README.md**
-
-```markdown
 # 🕵️ Bug Bounty Automated Recon Framework
 
 Fully automated reconnaissance toolkit that:
@@ -25,22 +17,20 @@ Built in phases for clarity and modularity.
 
 ## 📁 Project Structure
 
-```
-
+```text
 .
 ├── recon.py              # Main pipeline
 ├── notify.py             # Telegram alert handling
 ├── config.yaml           # Tools + paths + notification settings
 ├── targets.txt           # One domain per line
 ├── logs/                 # Daily logs
-├── results/
-│   ├── subdomains/       # Raw + diff files
-│   ├── alive/            # Alive hosts + metadata
-│   ├── scans/            # Nmap + nuclei results
-│   ├── screenshots/      # Browser captures
-│   └── tech/             # WhatWeb fingerprinting
-
-````
+└── results/
+    ├── subdomains/       # Raw + diff files
+    ├── alive/            # Alive hosts + metadata
+    ├── scans/            # Nmap + nuclei results
+    ├── screenshots/      # Browser captures
+    └── tech/             # WhatWeb fingerprinting
+```
 
 ---
 
@@ -51,8 +41,8 @@ Install dependencies:
 ```bash
 sudo apt update
 sudo apt install -y nmap whatweb
-pip install pyyaml
-````
+pip install pyyaml requests
+```
 
 Install external tools:
 
@@ -63,6 +53,9 @@ Install external tools:
 | Assetfinder | `go install github.com/tomnomnom/assetfinder@latest`                          |
 | httpx       | `go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest`            |
 | nuclei      | `go install -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest`       |
+| EyeWitness  | `apt install eyewitness` or clone from GitHub                                 |
+| Nmap        | `sudo apt install nmap`                                                       |
+| WhatWeb     | `sudo apt install whatweb`                                                    |
 
 Make sure `$GOPATH/bin` is in PATH.
 
@@ -99,7 +92,6 @@ notify:
   telegram:
     token: "YOUR_BOT_TOKEN_HERE"
     chat_id: "YOUR_CHAT_ID_HERE"
-
 ```
 
 ---
@@ -108,7 +100,7 @@ notify:
 
 Add targets (one per line) in:
 
-```
+```text
 targets.txt
 ```
 
@@ -136,7 +128,7 @@ Merges + deduplicates output.
 
 Creates:
 
-```
+```text
 example.com_2026-01-07.txt
 example.com_2026-01-07_new.txt
 ```
@@ -222,6 +214,3 @@ tail -f logs/cron.log
 Pull requests, issues, ideas — all welcome.
 
 Happy hunting 👑
-
-```
-
